@@ -1,2 +1,2 @@
-# AWSTest
+# AWS
 aws test codes
