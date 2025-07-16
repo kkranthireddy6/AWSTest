@@ -1,0 +1,67 @@
+To create and expose an AWS Lambda function to the outside world (internet), you need to integrate it with a service that provides an HTTP interface — most commonly API Gateway. Here's a full guide to get you from zero to live:
+
+
+Lambda - Functions as a service
+Mostly used in Event-based Triggers = Similar like Azure functions (event notification system) by validating Input Payload .
+
+🚀 Steps to Create and Expose an AWS Lambda Function
+
+1️⃣ Create the Lambda Function
+	Option A: AWS Console
+		a. Go to AWS Lambda Console.
+		b. Click “Create function” > Choose Author from scratch.
+		c. Name your function (e.g., helloWorldFunction).
+		d. Runtime: e.g., Node.js, Python, etc.
+		e. Click Create function.
+		f. In the function code editor, add something simple:
+	
+	Node.js Example:
+	exports.handler = async (event) => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({ message: 'Hello from Lambda!' }),
+    };
+};
+
+
+2️⃣ Add an API Gateway to Expose Your Lambda
+	Option A: REST API via API Gateway (Best for traditional REST endpoints)
+		a. Go to API Gateway Console.
+		b. Click Create API > Choose REST API > Build.
+		c. Name your API, e.g., MyLambdaAPI.
+		d. Click Create Resource (e.g., /hello).
+		e. Select the resource, click Create Method > Choose GET or POST.
+		f. Integration type: Lambda Function
+		g. Enter your Lambda function name.
+		h. Click Save and allow permissions when prompted.
+		i. Click Actions > Deploy API
+			§ Deployment stage: create a new one (e.g., prod)
+		j. You’ll get an Invoke URL, like:
+
+
+https://abc123.execute-api.us-east-1.amazonaws.com/prod/hello
+You can now hit this URL from any browser or HTTP client.
+
+3️⃣ Set CORS (if needed)
+	If you're calling the API from a browser frontend (e.g., React), you'll need to enable CORS:
+		○ Go to API Gateway > Your Method (e.g., GET) > Enable CORS
+		○ Choose the methods you need and click Enable CORS and replace existing CORS headers.
+
+4️⃣ Test It!
+	Try calling the API from:
+	
+	bash
+	curl https://abc123.execute-api.us-east-1.amazonaws.com/prod/hello
+	Or in React:
+	useEffect(() => {
+  fetch('https://abc123.execute-api.us-east-1.amazonaws.com/prod/hello')
+    .then(res => res.json())
+    .then(console.log);
+}, []);
+
+
+✅ Optional Enhancements
+		○ Authentication: Add JWT or IAM Auth to protect your endpoint.
+		○ Rate limiting: Use API Gateway throttling.
+		○ Custom Domain: Use API Gateway with a custom domain (e.g., api.mysite.com).
+		○ Monitoring: Use CloudWatch Logs to view and debug Lambda logs.
