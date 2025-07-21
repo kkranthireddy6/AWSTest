@@ -64,21 +64,21 @@ app.get('/list-files', async (req, res) => {
 // Endpoint to generate a pre-signed URL for downloading files from S3
 // Note: Ensure that the file exists in the S3 bucket before generating the download URL
 // Generate pre-signed URL for download
-// app.get('/generate-download-url/:filename', async (req, res) => {
-//   const { filename } = req.params;
+ app.get('/generate-download-url/:filename', async (req, res) => {
+   const { filename } = req.params;
 
-//   const command = new GetObjectCommand({
-//     Bucket: process.env.S3_BUCKET_NAME,
-//     Key: filename,
-//   });
+   const command = new GetObjectCommand({
+     Bucket: process.env.S3_BUCKET_NAME,
+     Key: filename,
+   });
 
-//   try {
-//     const url = await getSignedUrl(s3, command, { expiresIn: 60 });
-//     res.json({ url });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error generating download URL' });
-//   }
-// });
+   try {
+     const url = await getSignedUrl(s3, command, { expiresIn: 60 });
+     res.json({ url });
+   } catch (error) {
+     res.status(500).json({ error: 'Error generating download URL' });
+   }
+ });
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
